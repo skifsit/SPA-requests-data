@@ -8,11 +8,17 @@ const store = fs.readFileSync('./store.html', 'utf8')
 const checkout = fs.readFileSync('./checkout.html', 'utf8')
 const nav = fs.readFileSync('./nav.html', 'utf8')
 
+const {getNewHeaders} = require('./server-utils.js')
+
 const requestHandler = (req, res) => {
   if (req.url === '/favicon.ico') {
     return res.end('')
   }
   console.log(req.url, req.method)
+  const newHeaders = getNewHeaders(req.headers)
+  if (newHeaders) {
+    console.log(newHeaders)
+  }
   let resHTML = ''
   switch (req.url) {
     case '/':
