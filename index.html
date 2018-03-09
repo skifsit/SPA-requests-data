@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MPA</title>
+</head>
+<body>
+    <script>
+        const scr = document.createElement('script')
+        scr.src = '/script-url'
+        document.body.appendChild(scr)
+
+      let xhr = new XMLHttpRequest()
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            console.log(xhr.responseText)
+        }
+      };
+      xhr.open('GET', '/script-url')
+      xhr.send()
+
+        fetch('/script-url')
+          .then(res => res.text())
+          .then(res => console.log(res))
+    </script>
+</body>
+</html>
