@@ -2,6 +2,9 @@ const http = require('http')
 const fs = require('fs')
 const port = 6300
 
+const {getNewHeaders} = require('./server-utils.js')
+
+const favicon = fs.readFileSync('./favicon.ico')
 const index = fs.readFileSync('./index.html', 'utf8')
 // let resHTML = index.replace('THIS_STRING_WILL_BE_REPLACED')
 
@@ -17,31 +20,36 @@ const user = fs.readFileSync('./user.html', 'utf8')
 // resHTML = resHTML.replace('>checkout<', '>' + checkout + '<')
 
 const requestHandler = (req, res) => {
-  console.log(req.url, req.method)
-  console.log(JSON.stringify(req.headers))
   if (req.url === '/favicon.ico') {
-    return res.end('')
-  } else if (req.url === '/script-url') {
-    res.setHeader('content-type', 'application/json; charset=utf-8')
+    res.setHeader('Content-Type', 'image/x-icon; binary')
+    return res.end(favicon)
+  }
+  console.log(req.url, req.method)
+  const newHeaders = getNewHeaders(req.headers)
+  if (newHeaders) {
+    console.log(newHeaders)
+  }
+  if (req.url === '/script-url') {
+    res.setHeader('Content-Type', 'application/json; charset=utf-8')
     return res.end('{ "key": "value" }')
   } else if (req.url === '/root') {
-    res.setHeader('content-type', 'text/html; charset=utf-8')
+    res.setHeader('Content-Type', 'text/html; charset=utf-8')
     return res.end(root)
   } else if (req.url === '/store') {
-    res.setHeader('content-type', 'text/html; charset=utf-8')
+    res.setHeader('Content-Type', 'text/html; charset=utf-8')
     return res.end(store)
   } else if (req.url === '/checkout') {
-    res.setHeader('content-type', 'text/html; charset=utf-8')
+    res.setHeader('Content-Type', 'text/html; charset=utf-8')
     return res.end(checkout)
   } else if (req.url === '/nav') {
-    res.setHeader('content-type', 'text/html; charset=utf-8')
+    res.setHeader('Content-Type', 'text/html; charset=utf-8')
     return res.end(nav)
   } else if (req.url === '/user') {
-    res.setHeader('content-type', 'text/html; charset=utf-8')
+    res.setHeader('Content-Type', 'text/html; charset=utf-8')
     return res.end(user)
   }
 
-  // res.setHeader('content-type', 'text/html; charset=utf-8"');
+  // res.setHeader('Content-Type', 'text/html; charset=utf-8"');
   // res.end(resHTML)
   res.end(index)
 }

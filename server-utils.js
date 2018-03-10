@@ -4,12 +4,14 @@ function getNewHeaders (newHeaders) {
   const newKeys = Object.keys(newHeaders)
   let returnHeadersObject = null
   newKeys.forEach(newKey => {
-    if (!cachedHeaders.has(newKey)) {
+    const header = cachedHeaders.get(newKey)
+    const newHeader = newHeaders[newKey]
+    if (!header || header !== newHeader) {
       if (!returnHeadersObject) {
         returnHeadersObject = {}
       }
-      returnHeadersObject[newKey] = newHeaders[newKey]
-      cachedHeaders.set(newKey, newHeaders[newKey])
+      returnHeadersObject[newKey] = newHeader
+      cachedHeaders.set(newKey, newHeader)
     }
   })
   return returnHeadersObject
