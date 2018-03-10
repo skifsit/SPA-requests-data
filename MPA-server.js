@@ -1,7 +1,7 @@
 const http = require('http')
 const fs = require('fs')
 const port = 6333
-const { URL, URLSearchParams } = require('url');
+const { URLSearchParams } = require('url');
 
 const {getNewHeaders} = require('./server-utils.js')
 
@@ -11,6 +11,8 @@ const root = fs.readFileSync('./root.html', 'utf8')
 const store = fs.readFileSync('./store.html', 'utf8')
 const checkout = fs.readFileSync('./checkout.html', 'utf8')
 const nav = fs.readFileSync('./nav.html', 'utf8')
+
+const sampleImage = fs.readFileSync('./sample.png')
 
 const requestHandler = (req, res) => {
   if (req.url === '/favicon.ico') {
@@ -34,6 +36,10 @@ const requestHandler = (req, res) => {
       case '/checkout':
         resHTML = index.replace('THIS_STRING_WILL_BE_REPLACED', nav + checkout)
         break;
+      case '/sample.png':
+        res.setHeader('Content-Type', 'image/png');
+        res.end(sampleImage)
+        return
     }
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.end(resHTML)
@@ -54,7 +60,7 @@ const requestHandler = (req, res) => {
     req.on('end', () => {
       if (isFormURL) {
         const searchParamsURL = new URLSearchParams(fullData)
-        console.log(searchParamsURL.get('username'))
+        console.log(searchParamsURL)
       }
       res.end(resHTML)
     })

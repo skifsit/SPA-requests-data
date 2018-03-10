@@ -24,8 +24,8 @@
         let URL = '/'
         function render () {
           let outHTML = ''
-          // switch (window.location.pathname) {
-          switch (URL) {
+          switch (window.location.pathname) {
+          // switch (URL) {
             case '/':
               outHTML = templates.nav + templates.root
               break;
@@ -40,6 +40,24 @@
               break;
           }
           app.innerHTML = outHTML
+          // if (URL === '/checkout') {
+          if (window.location.pathname === '/checkout') {
+            app.querySelector('form').addEventListener('submit', function (e) {
+              e.preventDefault()
+              const username = app.querySelector('form input[name="username"]').value
+              const password = app.querySelector('form input[name="password"]').value
+              let myHeaders = new Headers()
+              myHeaders.append("Content-Type", "application/x-www-form-urlencoded")
+              fetch("/submit", {
+                method: "POST",
+                headers: myHeaders,
+                body: `username=${username}&password=${password}&my=aaaa`
+              }).then(res => res.json())
+                .then(json => {
+                  alert(JSON.stringify(json))
+                })
+            })
+          }
         }
         Promise.all([
           fetch('/nav').then(res => res.text()),
@@ -73,8 +91,8 @@
           // var target = e.target
           if (target.nodeName === 'A' && target.nodeType === 1) {
             e.preventDefault()
-            URL = target.getAttribute('href')
-            // history.pushState({}, target.textContent, target.getAttribute('href'))
+            // URL = target.getAttribute('href')
+            history.pushState({}, target.textContent, target.getAttribute('href'))
             render()
           }
         })
